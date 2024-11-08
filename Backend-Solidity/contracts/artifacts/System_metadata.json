@@ -1,0 +1,69 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_maxTickets",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_maxPurchasableTicketsPerOneUser",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "buyTicket",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/4_System.sol": "System"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/4_System.sol": {
+			"keccak256": "0x2a72764fd05b2d54a246ca969dccb38706e2c768e2ebf252ea3348336629ee16",
+			"license": "GPL-3.0",
+			"urls": [
+				"bzz-raw://7f91bb1ec14536c8f8826c958be2938ddbf3afead26f9d03acca198b4b3710be",
+				"dweb:/ipfs/QmegAnZmdSYrMVrDRqftyddwveXthkeSVPxJFzV3y87nn1"
+			]
+		}
+	},
+	"version": 1
+}
