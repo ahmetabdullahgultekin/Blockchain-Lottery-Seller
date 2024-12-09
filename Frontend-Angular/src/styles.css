@@ -88,3 +88,14 @@ body {
   background: rgba(0, 0, 0, 0.2);
   margin-bottom: 1rem;
 }
+
+.hash-input {
+  width: 100%;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.57);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  font-family: monospace;
+  margin-bottom: 1rem;
+}

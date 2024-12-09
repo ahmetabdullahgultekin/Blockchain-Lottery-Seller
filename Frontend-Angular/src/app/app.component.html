@@ -1,28 +1,85 @@
 <div class="container">
   <header class="header">
-    <svg class="logo" width="150" height="150" viewBox="0 0 100 100">
-      <circle cx="50" cy="50" r="45" fill="none" stroke="var(--primary)" stroke-width="2">
-        <animate attributeName="stroke-dasharray" from="0 283" to="283 283" dur="2s" />
+    <svg class="logo" width="300" height="300" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="45" fill="none" stroke="var(--primary)" stroke-width="2"
+              [attr.stroke-dasharray]="dashArray"
+              [attr.stroke-dashoffset]="dashOffset * timerService.timeLeft / timerService.sellingDuration">
+        <animate attributeName="stroke-dasharray" from="0 283" to="283 283" dur="1s" />
       </circle>
-      <text x="50" y="55" text-anchor="middle" fill="white" font-size="20">ETH</text>
+      <text x="50" y="50" text-anchor="middle" fill="white" font-size="7">
+        Remaining Time: {{timerService.timeLeft.toFixed(1)}}
+      </text>
+      <text x="50" y="60" text-anchor="middle" fill="white" font-size="7">
+        Stage: {{this.timerService.stage}}
+      </text>
     </svg>
     <h1>CryptoLotto</h1>
     <p>Decentralized Ethereum Lottery</p>
   </header>
 
-  <div id="wallet-status">
-    Please connect your wallet to continue
+  <div id="wallet-status" *ngIf="!this.contractService.currentAccount">
+    <p>Please connect your wallet to continue</p>
   </div>
 
   <div class="lottery-card">
-    <h2>Current Jackpot</h2>
-    <div id="jackpot-amount">Loading...</div>
+    <h2>Account</h2>
+    <div id="jackpot-amount">
+      <p *ngIf="contractService.currentAccount"> Connected Wallet: {{contractService.currentAccount}}</p></div>
     <div class="ticket-numbers" id="ticket-grid"></div>
-    <button class="btn" id="purchase-ticket">Purchase Ticket (0.01 ETH)</button>
+    <button class="btn" id="purchase-ticket" (click)="this.contractService.connectAccount()">
+      Connect Wallet
+    </button>
   </div>
 
   <div class="lottery-card">
-    <h2>Previous Winners</h2>
-    <div id="winners-list"></div>
+    <h2>Your Hash Value</h2>
+    <div id="input-box">
+      <h3>Option 2: Custom Hash Entry</h3>
+      <input type="text"
+             class="hash-input"
+             id="hash-input"
+             placeholder="Enter your lucky hash (0x...)"
+             [pattern]="'^0x[0-9a-fA-F]{64}$'"
+             [maxLength]="66">
+      <button class="btn" id="purchase-with-hash" (click)="contractService.purchaseTicket(10)">Buy with Hash (0.001 ETH)</button>
+    </div>
   </div>
+
+  <div class="lottery-card">
+    <h2>Test getBalance method</h2>
+    <div id="balance">
+      <button class="btn" (click)="this.contractService.getBalance()">
+        Get Balance
+      </button>
+    </div>
+  </div>
+
+  <div class="lottery-card">
+    <h2>Test purchaseTicket method</h2>
+    <div id="purchase">
+      <button class="btn" (click)="this.contractService.purchaseTicket(10)">
+        Purchase Ticket
+      </button>
+    </div>
+  </div>
+
+  <div class="lottery-card">
+    <h2>Test revealWinner method</h2>
+    <div id="reveal">
+      <button class="btn" (click)="this.contractService">
+        Reveal Winner
+      </button>
+    </div>
+  </div>
+
+  <div class="lottery-card">
+    <h2>Test learnstage method</h2>
+    <div id="withdraw">
+      <button class="btn" (click)="this.contractService.learnStage()">
+        Withdraw
+      </button>
+    </div>
+  </div>
+
+
 </div>
