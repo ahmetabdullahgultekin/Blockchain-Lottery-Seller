@@ -1,50 +1,56 @@
 {
-  "hash": "4e97503e",
-  "configHash": "014f3973",
+  "hash": "b3333e6f",
+  "configHash": "4ee7eb02",
   "lockfileHash": "4a038c60",
-  "browserHash": "9c4e4f53",
+  "browserHash": "e858dd06",
   "optimized": {
+    "@angular/common": {
+      "src": "../../../../../../node_modules/@angular/common/fesm2022/common.mjs",
+      "file": "@angular_common.js",
+      "fileHash": "fce7040a",
+      "needsInterop": false
+    },
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "790dc623",
+      "fileHash": "e4ce6d8e",
+      "needsInterop": false
+    },
+    "@angular/forms": {
+      "src": "../../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
+      "file": "@angular_forms.js",
+      "fileHash": "6ece211e",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "eb5389b9",
+      "fileHash": "21b5dfe4",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "07557244",
+      "fileHash": "cb92bcb7",
       "needsInterop": false
     },
     "rxjs": {
       "src": "../../../../../../node_modules/rxjs/dist/esm5/index.js",
       "file": "rxjs.js",
-      "fileHash": "952430eb",
+      "fileHash": "9a82e501",
       "needsInterop": false
     },
     "web3": {
       "src": "../../../../../../node_modules/web3/lib/esm/index.js",
       "file": "web3.js",
-      "fileHash": "0664b992",
+      "fileHash": "70fe28e7",
       "needsInterop": false
     },
     "web3modal": {
       "src": "../../../../../../node_modules/web3modal/dist/index.js",
       "file": "web3modal.js",
-      "fileHash": "4662b6c5",
+      "fileHash": "06f34ddf",
       "needsInterop": true
-    },
-    "@angular/common": {
-      "src": "../../../../../../node_modules/@angular/common/fesm2022/common.mjs",
-      "file": "@angular_common.js",
-      "fileHash": "b7bc9cdd",
-      "needsInterop": false
     }
   },
   "chunks": {

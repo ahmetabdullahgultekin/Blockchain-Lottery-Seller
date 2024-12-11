@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0
 
 pragma solidity >=0.8.2 <0.9.0;
-
+/*
 interface ITicketFeeOracle {
-  function getTicketFee() external view returns (uint);
-}
-
+    function getTicketFee() external view returns (uint);
+    }
+*/
 contract Lottery{
 
   address payable admin; //deployer
@@ -22,15 +22,16 @@ contract Lottery{
   mapping (address => uint) public revealedNumbers; // numbers revealed by users
 
 
-  constructor(uint _purchaseDuration, uint _decideDuration){
+  constructor(uint _purchaseDurationInDays, uint _decideDurationInDays){
+    require(_purchaseDurationInDays > 0, "Purchase duration must be greater than 0.");
+    require(_decideDurationInDays > 0, "Decision duration must be greater than 0.");
     admin = payable(msg.sender);
     // ITicketFeeOracle  feeOracle = ITicketFeeOracle(0xAD39623a8Cd97185755310Cec8AFDb19Fe330D5A);
-    //ticketFee = feeOracle.getTicketFee();
-    ticketFee = 7 ether;
-    purchaseEndTime = block.timestamp + _purchaseDuration;
-    decideEndTime = purchaseEndTime + _decideDuration;
+    // ticketFee = feeOracle.getTicketFee();
+    ticketFee = 0.0007 ether;
+    purchaseEndTime = block.timestamp + (_purchaseDurationInDays * 1 days);
+    decideEndTime = purchaseEndTime + (_decideDurationInDays * 1 days);
   }
-
 
   // contracts balance
   function getBalance() view public returns(uint){
@@ -52,29 +53,23 @@ contract Lottery{
     userRNHashes[msg.sender] = hash;
     users.push(payable(msg.sender));
   }
-/*
-    function getSender(address sender, uint number) public  returns(bytes memory){
-        return abi.encodePacked(sender, number);
-    }
-*/
+
   //checks the hash
-  function hashChecker(uint32 _number) view  internal returns(bool){
-    bytes memory combinedData = abi.encodePacked(_number);
-    bytes32 calculatedHash = keccak256(combinedData);
-    // bytes32 calculatedHash = sha256(abi.encodePacked(sender, number));
+  function hashChecker(address _sender, uint32 _number) view  internal returns(bool){
+    // avoid the hash of same random number using concatanation hash
+    bytes memory combine = abi.encodePacked(_sender, _number);
+    bytes32 calculatedHash = keccak256(combine);
+    // conpare the pre-hash and hash of user address-revealed number
     return userRNHashes[msg.sender] == calculatedHash;
   }
-  /*function hashChecker(address sender, uint number) view internal returns (bool) {
-      bytes32 calculatedHash = sha256(abi.encodePacked(sender, number));
-      return userRNHashes[sender] == calculatedHash;
-  }*/
 
   // reveal the random number
   function revealNumber(uint32 number) external {
+    require(block.timestamp > purchaseEndTime, "Lottery reveal period not yet started");
     require(block.timestamp < decideEndTime, "Lottery reveal period is over!");
     require(userRNHashes[msg.sender] != 0, "No hash submitted");
     require(revealedNumbers[msg.sender] == 0, "Already revealed");
-    require(hashChecker(number), "You aren't revealing the correct number!");
+    require(hashChecker(msg.sender, number), "You aren't revealing the correct number!");
     revealedNumbers[msg.sender] = number;
   }
   // decide the winner after reaching reveal time
@@ -82,7 +77,7 @@ contract Lottery{
     require( admin == msg.sender, "You are not the owner!");
     require( !winnerExist, "Winner already choosed.");
     require(block.timestamp >= decideEndTime, "Decide stage has not ended!");
-
+    // take xor of all revealed numbers
     finalRandomNumber = revealedNumbers[users[0]];
     for (uint i = 1; i < users.length; i++) {
       finalRandomNumber ^= revealedNumbers[users[i]];
@@ -92,8 +87,8 @@ contract Lottery{
   }
   function claimPrize() external {
     require(msg.sender == winner, "You are not the winner");
-    winner.transfer(getBalance());
-    //selfdestruct(payable(winner));// ide not support to destruct
+    // winner.transfer(getBalance());
+    selfdestruct(payable(winner));// ide not support to destruct
   }
 
   function amIWinner() view public returns (string memory) {

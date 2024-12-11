@@ -1,15 +1,15 @@
 <div class="container">
   <header class="header">
-    <svg class="logo" width="300" height="300" viewBox="0 0 100 100">
+    <svg class="logo" width="400" height="400" viewBox="0 0 100 100">
       <circle cx="50" cy="50" r="45" fill="none" stroke="var(--primary)" stroke-width="2"
               [attr.stroke-dasharray]="dashArray"
-              [attr.stroke-dashoffset]="dashOffset * timerService.timeLeft / timerService.sellingDuration">
+              [attr.stroke-dashoffset]="BigInt(Math.floor(dashOffset)) * BigInt(timerService.timeLeft) / BigInt(timerService.duration)">
         <animate attributeName="stroke-dasharray" from="0 283" to="283 283" dur="1s" />
       </circle>
       <text x="50" y="50" text-anchor="middle" fill="white" font-size="7">
-        Remaining Time: {{timerService.timeLeft.toFixed(1)}}
+        Remaining Time: {{timerService.timeLeft}} seconds
       </text>
-      <text x="50" y="60" text-anchor="middle" fill="white" font-size="7">
+      <text x="50" y="60" text-anchor="middle" fill="white" font-size="4">
         Stage: {{this.timerService.stage}}
       </text>
     </svg>
@@ -19,6 +19,16 @@
 
   <div id="wallet-status" *ngIf="!this.contractService.currentAccount">
     <p>Please connect your wallet to continue</p>
+  </div>
+
+
+  <div class="lottery-card">
+    <h2>Test learnstage method</h2>
+    <div id="withdraw">
+      <button class="btn" (click)="this.contractService.learnStage()">
+        Check Stage
+      </button>
+    </div>
   </div>
 
   <div class="lottery-card">
@@ -40,14 +50,16 @@
              id="hash-input"
              placeholder="Enter your lucky hash (0x...)"
              [pattern]="'^0x[0-9a-fA-F]{64}$'"
-             [maxLength]="66">
-      <button class="btn" id="purchase-with-hash" (click)="contractService.purchaseTicket(10)">Buy with Hash (0.001 ETH)</button>
+             [maxLength]="66"
+              [(ngModel)]="this.contractService.hashValue">
+      <button class="btn" id="purchase-with-hash" (click)="contractService.purchaseTicket(this.contractService.hashValue)">Buy with Hash (0.0007 ETH)</button>
     </div>
   </div>
 
   <div class="lottery-card">
-    <h2>Test getBalance method</h2>
+    <h2>Get Balance</h2>
     <div id="balance">
+      <p *ngIf="contractService.balance"> Current Balance: {{contractService.balance}}</p>
       <button class="btn" (click)="this.contractService.getBalance()">
         Get Balance
       </button>
@@ -55,31 +67,20 @@
   </div>
 
   <div class="lottery-card">
-    <h2>Test purchaseTicket method</h2>
-    <div id="purchase">
-      <button class="btn" (click)="this.contractService.purchaseTicket(10)">
-        Purchase Ticket
-      </button>
-    </div>
-  </div>
-
-  <div class="lottery-card">
-    <h2>Test revealWinner method</h2>
+    <h2>Reveal Winner</h2>
     <div id="reveal">
-      <button class="btn" (click)="this.contractService">
+      <button class="btn" (click)="this.contractService.pickWinner()">
         Reveal Winner
       </button>
     </div>
   </div>
 
   <div class="lottery-card">
-    <h2>Test learnstage method</h2>
-    <div id="withdraw">
-      <button class="btn" (click)="this.contractService.learnStage()">
-        Withdraw
+    <h2>Claim Prize</h2>
+    <div id="claim">
+      <button class="btn" (click)="this.contractService.claimPrize()">
+        Claim Prize
       </button>
     </div>
   </div>
-
-
 </div>

@@ -13,6 +13,8 @@ export class ContractService {
 
   uContract: any;
   currentAccount = '';
+  hashValue = 0;
+  winner = '';
   private web3js: any;
   private provider: any;
   private accounts: any;
@@ -63,8 +65,13 @@ export class ContractService {
       this.accounts = await this.web3js.eth.getAccounts();
       this.uContract = new this.web3js.eth.Contract(uContract_abi, uContract_address);
 
-      return await this.uContract
-        .methods.getBalance().call();
+      this.balance = await this.uContract
+        .methods.getBalance().call(
+          {
+            from: this.accounts[0]
+          }
+        );
+      console.log(this.balance);
     } catch (error) {
       console.log(error);
     }
@@ -83,6 +90,7 @@ export class ContractService {
           from: this.accounts[0],
           value: this.web3js.utils.toWei('0.001', 'ether')
         });
+      console.log('Ticket purchased');
     } catch (error) {
       console.log(error);
     }
@@ -96,10 +104,53 @@ export class ContractService {
 
       this.uContract = new this.web3js.eth.Contract(uContract_abi, uContract_address);
 
-      this.timerService.stage = await this.uContract
+      const time = await this.uContract
         .methods.learnStage().call({
           from: this.accounts[0]
         });
+      this.timerService.stage = time[0];
+      this.timerService.duration = BigInt(time[2]) - BigInt(time[1]);
+      this.timerService.timeLeft = this.timerService.duration;
+      console.log(this.timerService.stage);
+      console.log(this.timerService.timeLeft);
+
+      this.timerService.startTimer();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async pickWinner() {
+    try {
+      this.provider = await this.web3Modal.connect(); // set provider
+      this.web3js = new Web3(this.provider); // create web3 instance
+      this.accounts = await this.web3js.eth.getAccounts();
+
+      this.uContract = new this.web3js.eth.Contract(uContract_abi, uContract_address);
+
+     this.winner = await this.uContract
+        .methods.pickWinner().send({
+          from: this.accounts[0]
+        });
+      console.log('Winner picked');
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async claimPrize() {
+    try {
+      this.provider = await this.web3Modal.connect(); // set provider
+      this.web3js = new Web3(this.provider); // create web3 instance
+      this.accounts = await this.web3js.eth.getAccounts();
+
+      this.uContract = new this.web3js.eth.Contract(uContract_abi, uContract_address);
+
+      return await this.uContract
+        .methods.claimPrize().send({
+          from: this.accounts[0]
+        });
+      console.log('Prize claimed');
     } catch (error) {
       console.log(error);
     }

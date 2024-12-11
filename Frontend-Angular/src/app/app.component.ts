@@ -3,12 +3,14 @@ import {RouterOutlet} from '@angular/router';
 import {ContractService} from '../services/contract.service';
 import {TimerService} from '../services/timer.service';
 import {NgIf} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    NgIf
+    NgIf,
+    FormsModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
@@ -22,7 +24,6 @@ export class AppComponent {
   constructor(protected contractService: ContractService, protected timerService: TimerService) {
   }
 
-  ngOnInit() {
-    this.timerService.startTimer();
-  }
+  protected readonly BigInt = BigInt;
+  protected readonly Math = Math;
 }
